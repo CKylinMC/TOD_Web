@@ -92,14 +92,6 @@
         margin-left: 30px;
     }
 </style> -->
-<style>
-    .game-container .hide{
-        transition: height .3s ease-in-out .2s, opacity .3s 0s !important;
-        height: 0px!important;
-        opacity: 0!important;
-        
-    }
-</style>
         <h1>真心话大冒险</h1>
 
 
@@ -108,13 +100,13 @@
             <ul id="game-names" class="multi-column-menu">
                 
             </ul>
-            <div style="position:absolute;left: 50%;transform: translate(-50%,0)">
-            <button style="font-size: 1.4rem;text-align:center;" onclick="resetGame()" class="red">重置</button>
+            <div class="game-btns">
+            <button id="game-reset" onclick="resetGame()" class="red">重置</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button style="font-size: 1.4rem;font-weight: bold;text-align:center;" onclick="Game_Go()" id="game-go">❤️ Go! ⚔️</button>
+            <button onclick="Game_Go()" id="game-go">❤️ Go! ⚔️</button>
             </div>
-            <div style="height: 50px;">&nbsp;</div>
-            <div id="game-result" style="transition: height .3s ease-in-out , opacity .3s .2s;text-align:center;margin: 10px 50px;height: 200px;opacity: 1" class="hide">&nbsp;</div>
+            <div class="game-space">&nbsp;</div>
+            <div id="game-result" class="hide">&nbsp;</div>
         </div>
 
 
@@ -133,20 +125,25 @@
     <template id="temp-zxh">
         <div class="container hidden" id="card2">
             <h1>❤️ 真心话</h1>
-            <button onclick="resetFilter()" class="s-resetfilter s-hide">重置筛选</button>
-            <button onclick="randomOne()" class="s-random s-hide">随机</button>
-            <div id="zxh-container">
-                <ul id="zxh-all-list">
-
-                </ul>
+            <div class="exclude-tags"></div>
+            <div class="include-tags"></div>
+            <div class="container-btns">
+                <button onclick="resetFilter()" class="s-resetfilter s-hide red">重置筛选</button>
+                <button onclick="randomOne()" class="s-random s-hide">随机</button>
+            </div>
+            <div id="zxh-container" class="s-container">
             </div>
         </div>
     </template>
     <template id="temp-dmx">
         <div class="container hidden" id="card2">
             <h1>⚔️ 大冒险</h1>
-            <button onclick="resetFilter()" class="s-resetfilter s-hide">重置筛选</button>
-            <button onclick="randomOne()" class="s-random s-hide">随机</button>
+            <div class="exclude-tags"></div>
+            <div class="include-tags"></div>
+            <div class="container-btns">
+                <button onclick="resetFilter()" class="s-resetfilter s-hide red">重置筛选</button>
+                <button onclick="randomOne()" class="s-random s-hide">随机</button>
+            </div>
             <div id="dmx-container" class="s-container">
             </div>
         </div>
@@ -289,6 +286,66 @@
             loadList(window.data.curr);
         }
 
+        function updateTagsDisplay(){
+            let ul,arrs;
+            if(window.data.exclude.length){
+                ul = document.createElement("ul");
+                ul.className = "s-tags";
+                window.data.exclude.forEach(e=>{
+                    let li = document.createElement("li");
+                    li.className = "s-tag-item";
+                    li.innerHTML = e;
+                    li.onclick = ev=>rmExcludeTag(ev.target.innerHTML);
+                    ul.appendChild(li);
+                });
+                arrs = document.querySelectorAll(".exclude-tags");
+                arrs.forEach(e=>{
+                    e.innerHTML = "<h2>排除：</h2>";
+                    e.appendChild(ul);
+                });
+            }else{
+                arrs = document.querySelectorAll(".exclude-tags");
+                arrs.forEach(e=>{
+                    e.innerHTML = "";
+                });
+            }
+            
+            if(window.data.include.length){
+                ul = document.createElement("ul");
+                ul.className = "s-tags";
+                window.data.include.forEach(e=>{
+                    let li = document.createElement("li");
+                    li.className = "s-tag-item";
+                    li.innerHTML = e;
+                    li.onclick = ev=>rmIncludeTag(ev.target.innerHTML);
+                    ul.appendChild(li);
+                });
+                arrs = document.querySelectorAll(".include-tags");
+                arrs.forEach(e=>{
+                    e.innerHTML = "<h2>包含：</h2>";
+                    e.appendChild(ul);
+                });
+            }else{
+                arrs = document.querySelectorAll(".include-tags");
+                arrs.forEach(e=>{
+                    e.innerHTML = "";
+                });
+            }
+        }
+
+        function rmExcludeTag(t){
+            console.log(t);
+            window.data.exclude.remove(t);
+            loadList(window.data.curr);
+            closeModal();
+        }
+
+        function rmIncludeTag(t){
+            window.data.include.remove(t);
+            loadList(window.data.curr);
+            closeModal();
+        }
+
         function addExcludeTag(t){
             window.data.exclude.push(t);
             loadList(window.data.curr);
@@ -340,6 +397,7 @@
                     });
                     if(!flag)return;
                     container.appendChild(createItem(e.name,e.tags,true));
+                    updateTagsDisplay();
                 });
             }
             if(type=="zxh") return loadData_zxh(false,func);
