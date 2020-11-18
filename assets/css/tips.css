@@ -1,0 +1,61 @@
+#tip-container>.tip{
+    pointer-events: none;
+    display: block;
+    position: fixed;
+    top: 10px;
+    min-width: 100px;
+    max-width: 50vw;
+    word-break: break-all;
+    word-wrap: normal;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    text-align: center;
+    /*border-radius: 12px;*/
+    padding: 6px;
+    border-bottom: #2195ff solid 3px;
+    box-shadow: 0 0 2px grey;
+    background: white;
+    /*background: #94d3ff;*/
+    /*color: #2e3dff;*/
+    /*font-size: x-large;*/
+    /*line-height: 1.1rem;*/
+    /*animation: tip_exited 5s cubic-bezier(0, 0, 0, 1.02) forwards;*/
+    /*animation: tip_exited 5s cubic-bezier(1, 0.51, 0, 0.74) forwards;*/
+    /*animation: tip_exited 5s cubic-bezier(0.66, 0, 0.27, 1.01) forwards;*/
+    animation: tip_exited 5s cubic-bezier(1, 0.01, 0, 1.01) forwards;
+    /*animation-delay: 5s;*/
+    z-index: 9999;
+}
+
+#tip-container > .tip.error {
+    border-bottom: #ff5c4b solid 3px;
+    /*background: #ffccb3;*/
+    background: white;
+    /*color: #ff3530;*/
+}
+
+#tip-container > .tip.warn {
+    border-bottom: #ff9836 solid 3px;
+    background: white;
+    /*background: #fff792;*/
+    /*color: #ff8126;*/
+}
+
+#tip-container > .tip.ok, #tip-container > .tip.success{
+    border-bottom: #43a047 solid 3px;
+    background: white;
+    /*background: #fff792;*/
+    /*color: #ff8126;*/
+}
+
+@keyframes tip_exited {
+    20%, 80% {
+        opacity: 1;
+        top: 10px;
+    }
+    from, to {
+        opacity: 0;
+        top: -100px;
+    }
+}

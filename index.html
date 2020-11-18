@@ -1,0 +1,545 @@
+<!doctype html>
+<!--CKYLINMC-WORKS-->
+<html>
+
+<head>
+    <title>Loading...</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta name="author" content="CKylinMC" />
+    <meta http-equiv="keywords" content="TruthOrDareQuestions">
+    <meta http-equiv="description" content="TruthOrDareQuestions site">
+    <style>
+        .dialog-button {
+            font-size: medium;
+        }
+    </style>
+    <script>
+        (function (window) {
+            window.data = {
+                curr: "none",
+                addr: {
+                    zxh: "https://cdn.jsdelivr.net/gh/CKylinMC/TOD_Dict@1.0/questions.json",
+                    dmx: "https://cdn.jsdelivr.net/gh/CKylinMC/TOD_Dict@1.0/actions.json"
+                },
+                zxh:{},
+                dmx:{},
+                include:[],
+                exclude:[]
+            }
+            window.page = {
+                loaded: false,
+                superTheme: false,
+                isIndex: false,
+                prevPage: "",
+                prevPageBtnAlwaysShow: true,
+                startload: new Date().valueOf(),
+                endload: new Date().valueOf(),
+                loadtiming: 0,
+                title: "Document by CKylin",
+                url: location.href,
+                onload: () => {},
+                autoexecs: [],
+                callback: (func) => {
+                    if (func instanceof Function) {
+                        if(page.loaded) func.apply();
+                        window.page.autoexecs.push(func);
+                    } else console.error(func, "Can not reg as callback: not a function.");
+                }
+            };
+        })(window);
+    </script>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/TODStyles.css">
+    <link rel="stylesheet" href="/assets/css/modal.css">
+    <link rel="stylesheet" href="/assets/css/PopNotify.css">
+    <link rel="stylesheet" href="/assets/css/tips.css">
+    <link rel="stylesheet" href="/assets/css/dialoger_1.1.css">
+</head>
+
+<body>
+    <header>
+        <span class="site-name" onclick="location.href='/'">真心话大冒险 for Online chat</span>
+    </header>
+    <div class="container loader" id="load-pending">
+        <div style="
+        font-size: xx-large;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+    ">
+            <span class="loading-spinner" style="
+            width: 36px;
+            height: 36px;
+        "> </span>
+            <span class="texttip">正在加载...</span>
+        </div>
+    </div>
+    <div class="container hidden" id="content-container">
+
+        <!-- <style>
+    .container > p,
+    .container > span,
+    .container > ul,
+    .container > table,
+    .container > div {
+        margin-left: 30px;
+    }
+</style> -->
+<style>
+    .game-container .hide{
+        transition: height .3s ease-in-out .2s, opacity .3s 0s !important;
+        height: 0px!important;
+        opacity: 0!important;
+        
+    }
+</style>
+        <h1>真心话大冒险</h1>
+
+
+        <h3>输入参与人名称</h3>
+        <div class="game-container">
+            <ul id="game-names" class="multi-column-menu">
+                
+            </ul>
+            <div style="position:absolute;left: 50%;transform: translate(-50%,0)">
+            <button style="font-size: 1.4rem;text-align:center;" onclick="resetGame()" class="red">重置</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button style="font-size: 1.4rem;font-weight: bold;text-align:center;" onclick="Game_Go()" id="game-go">❤️ Go! ⚔️</button>
+            </div>
+            <div style="height: 50px;">&nbsp;</div>
+            <div id="game-result" style="transition: height .3s ease-in-out , opacity .3s .2s;text-align:center;margin: 10px 50px;height: 200px;opacity: 1" class="hide">&nbsp;</div>
+        </div>
+
+
+        <h3>快速生成真心话问题或者大冒险要求！</h3>
+
+        <ul class="multi-column-menu">
+            <li><a href="javascript:void(0)" onclick="zxh()"
+                    style="font-size: 1.4rem;font-weight: bold;text-align:center">❤️ 真心话</a></li>
+            <li><a href="javascript:void(0)" onclick="dmx()"
+                    style="font-size: 1.4rem;font-weight: bold;text-align:center">⚔️ 大冒险</a></li>
+        </ul>
+    </div>
+    <div id="card-container">
+
+    </div>
+    <template id="temp-zxh">
+        <div class="container hidden" id="card2">
+            <h1>❤️ 真心话</h1>
+            <button onclick="resetFilter()" class="s-resetfilter s-hide">重置筛选</button>
+            <button onclick="randomOne()" class="s-random s-hide">随机</button>
+            <div id="zxh-container">
+                <ul id="zxh-all-list">
+
+                </ul>
+            </div>
+        </div>
+    </template>
+    <template id="temp-dmx">
+        <div class="container hidden" id="card2">
+            <h1>⚔️ 大冒险</h1>
+            <button onclick="resetFilter()" class="s-resetfilter s-hide">重置筛选</button>
+            <button onclick="randomOne()" class="s-random s-hide">随机</button>
+            <div id="dmx-container" class="s-container">
+            </div>
+        </div>
+    </template>
+
+    <div class="top" onclick="goTop()">回到顶部</div>
+
+    <script>
+        page.title = "TruthOrDare Questions";
+        // page.url = "/index.html";
+        page.isIndex = true;
+
+        page.callback(function () {
+            let mode = getUrlParam("mode");
+            if (mode) {
+                if (mode == "z") {
+                    load_zxh();
+                    return;
+                }
+                if (mode == "d") {
+                    load_dmx();
+                    return;
+                }
+            }
+        });
+        
+
+        page.callback(function () {
+            loadCard2();
+        });
+        
+
+        page.callback(function () {
+            resetGame();
+        });
+
+        function goTop(){
+            scrollTo(0,0);
+        }
+
+        function loadCard2(){
+            let card2 = get("#card2");
+            if (card2) {
+                card2.className = "container anim-in delay";
+            }
+        }
+
+        function zxh() {
+            // location.href = "?mode=z";
+            load_zxh();
+        }
+
+        function dmx() {
+            // location.href = "?mode=d";
+            load_dmx();
+        }
+
+        function load_zxh() {
+            window.data.curr = "zxh";
+            showTips("❤️ 真心话");
+            let container = get("#card-container");
+            if(!container) return;
+            let tmpl = get("#temp-zxh");
+            if(tmpl){
+                container.innerHTML = tmpl.innerHTML;
+                loadCard2();
+                setTimeout(()=>{
+                    scrollTo(0,container.offsetTop-70);
+                },200);
+                loadList("zxh");
+            }
+        }
+
+        function load_dmx() {
+            window.data.curr = "dmx";
+            showTips("⚔️ 大冒险");
+            let container = get("#card-container");
+            if(!container) return;
+            let tmpl = get("#temp-dmx");
+            if(tmpl){
+                container.innerHTML = tmpl.innerHTML;
+                loadCard2();
+                setTimeout(()=>{
+                    scrollTo(0,container.offsetTop-70);
+                },200);
+                loadList("dmx");
+            }
+        }
+
+        function loadData_zxh(force = false,callback){
+            waitModal();
+            if(force||Object.keys(window.data.zxh).length==0){
+                console.log("load");
+                CKFetch.get(window.data.addr.zxh).then(r=>r.json()).then(
+                    json =>{
+                        window.data.zxh = json;
+                        closeModal();
+                        if(callback instanceof Function) callback.apply();
+                    }
+                );
+            }else {
+                console.log("skip");
+                closeModal();
+                if(callback instanceof Function) callback.apply();
+            }
+        }
+
+        function loadData_dmx(force = false,callback = ()=>{}){
+            waitModal();
+            if(force||Object.keys(window.data.dmx).length==0){
+                console.log("load");
+                CKFetch.get(window.data.addr.dmx).then(r=>r.json()).then(
+                    json =>{
+                        window.data.dmx = json;
+                        closeModal();
+                        if(callback instanceof Function) callback.apply();
+                    }
+                );
+            }else {
+                console.log("skip");
+                closeModal();
+                if(callback instanceof Function) callback.apply();
+            }
+        }
+        
+        function tagsModal(e){
+            let t = e.target;
+            let tagn = t.innerHTML;
+            let modaldom = `
+            <button onclick="addExcludeTag('${tagn}')" class="red" style="display:inline-block;margin: 5px auto !important;">排除此标签</button>
+            <button onclick="addIncludeTag('${tagn}')" class="green" style="display:inline-block;margin: 5px auto !important;">必须包括此标签</button>
+            <button onclick="closeModal()" style="display:block;margin: 5px auto !important">关闭</button>
+            `;
+            openModal(modalTitle("'"+tagn+"'")+modaldom,"center","nobtn");
+        }
+
+        function resetFilter(){
+            window.data.exclude = [];
+            window.data.include = [];
+            loadList(window.data.curr);
+        }
+
+        function addExcludeTag(t){
+            window.data.exclude.push(t);
+            loadList(window.data.curr);
+            closeModal();
+        }
+
+        function addIncludeTag(t){
+            window.data.include.push(t);
+            loadList(window.data.curr);
+            closeModal();
+        }
+
+        function randomOne(){
+            let container = get("#"+window.data.curr+"-container");
+            if(!container) return;
+            let arrs = [...container.children];
+            if(arrs.length<1) return;
+            let newarr = arrs.shuffle();
+            let e = document.createEvent("MouseEvents");
+            e.initEvent("click",true,true);
+            newarr[0].dispatchEvent(e);
+            scrollTo(0,newarr[0].offsetTop+(pageYOffset/2));
+        }
+
+        function loadList(type){
+            let func = ()=>{
+                let data = window.data.curr=="zxh"?window.data.zxh:(window.data.curr=="dmx"?window.data.dmx:{});
+                if(data=={}) return;
+                let items = data.data;
+                if(!items) return;
+                let container = get("#"+type+"-container");
+                if(!container) return;
+                container.innerHTML = "";
+                let exclude = window.data.exclude;
+                let include = window.data.include;
+                items.forEach(e=>{
+                    let flag = true;
+                    exclude.forEach(t=>{
+                        if(e.tags.includes(t)){
+                            flag = false;
+                            return;
+                        }
+                    });
+                    include.forEach(t=>{
+                        if(!e.tags.includes(t)){
+                            flag = false;
+                            return;
+                        }
+                    });
+                    if(!flag)return;
+                    container.appendChild(createItem(e.name,e.tags,true));
+                });
+            }
+            if(type=="zxh") return loadData_zxh(false,func);
+            else return loadData_dmx(false,func);
+        }
+
+        function makeTag(name = "-",asdom = false){
+            if(asdom) {
+                let li = document.createElement("li");
+                li.className = "s-tag-item";
+                li.innerHTML = name;
+                li.onclick = e=>tagsModal(e);
+                return li;
+            }
+            else return `<li class="s-tag-item">{name}</li>`;
+        }
+
+        function createItem(title = "@#$%^&*",tags = [],asdom = false) {
+            if(asdom){
+                let div = document.createElement("div");
+                div.onclick = e=>{
+                    let flag = true;
+                    let targetdom;
+                    e.path.forEach(i=>{
+                        console.log(i.tagName);
+                        if(i.tagName&&i.tagName.toLowerCase()=="li") flag = false;
+                        if(i.classList&&i.classList.contains("s-item")) targetdom = i;
+                    });
+                    if(!flag)return;
+                    let allactive = document.querySelectorAll(".s-item-active");
+                    [...allactive].forEach(e=>e.classList.remove("s-item-active"));
+                    targetdom.classList.add("s-item-active");
+                }
+                div.setAttribute("data-s-tags",tags.join(","));
+                div.className = "s-item";
+                let h2 = document.createElement("h2");
+                h2.innerHTML = title;
+                let ul = document.createElement("ul");
+                ul.className = "s-tags";
+                tags.forEach(e=>ul.appendChild(makeTag(e,true)));
+                div.appendChild(h2);
+                div.appendChild(ul);
+                return div;
+            }else{
+                let tagshtml = "";
+                tags.forEach(e=>tagshtml += makeTag(e));
+                let domhtml = ` <div class="s-item" data-s-tags="%TAGSTR%">
+                                    <h2>%TITLE%</h2>
+                                    <ul class="s-tags">
+                                        %TAGS%
+                                    </ul>
+                                </div>`;
+                domhtml = domhtml.replace("%TITLE%",title).replace("%TAGS%",tagshtml).replace("%TAGSTR%",tags.join(","));
+                return domhtml;
+            }
+        }
+
+        function tip(e, t) {
+            let el = e instanceof HTMLElement ? e : e.target;
+            let title = "";
+            if (el) {
+                title = el.innerHTML;
+            }
+            openModal(modalTitle(title) + t, "success", "关闭提示");
+        }
+    </script>
+    <style>
+        .float-btn {
+            position: fixed;
+            right: -120px;
+            bottom: 20px;
+            width: 120px;
+            height: 40px;
+            background: white;
+            line-height: 40px;
+            border-radius: 100px;
+            /* text-align: center; */
+            padding-left: 20px;
+            box-shadow: 0 6px 10px #80808052;
+            transition: right .5s ease 1s;
+        }
+
+        .float-btn:hover {
+            right: -15px;
+            transition: right .3s ease;
+        }
+
+        .float-btn.hidden {
+            right: -320px !important;
+            transition: right .5s ease 1s;
+        }
+
+        .float-back-btn {
+            position: fixed;
+            left: -120px;
+            top: 120px;
+            width: 120px;
+            height: 40px;
+            background: white;
+            line-height: 40px;
+            border-radius: 100px;
+            text-align: right;
+            padding-right: 20px;
+            box-shadow: 0 6px 10px #80808052;
+            transition: left .5s ease 1s;
+        }
+
+        .float-back-btn.hidden {
+            left: -320px !important;
+            transition: left .5s ease 1s;
+        }
+
+        .float-back-btn:hover,
+        .float-back-btn.alwaysShow {
+            left: -15px;
+            transition: left .3s ease;
+        }
+    </style>
+    <div class="float-btn">
+        <a href="/">返回首页</a>
+    </div>
+    <div class="float-back-btn hidden">
+        <a href="javascript:void(0)" onclick="goback()">返回上一页</a>
+    </div>
+    <footer>
+        推荐在电脑中使用Chrome、Firefox浏览器访问<br>CKylinMC &copy; 2020
+    </footer>
+    <script src="/assets/js/Cookies.js"></script>
+    <script src="/assets/js/dialoger_1.1.js"></script>
+    <script src="/assets/js/CKFetch.js"></script>
+    <script src="/assets/js/PopNotify.js"></script>
+    <script src="/assets/js/tips.js"></script>
+    <script src="/assets/js/modal.js"></script>
+    <script src="/assets/js/common.js"></script>
+    <script src="/assets/js/game.js"></script>
+    <script src="/assets/js/errorcatcher.js"></script>
+    <script>
+        initModal();
+        initTips();
+        dialoger.init();
+        var tipsShow;
+        if (tipsShow = getUrlParam("show")) {
+            showTips(tipsShow);
+        }
+    </script>
+    <script>
+        (function (window, document) {
+            if ("page" in window) {
+                let lp = get("#load-pending");
+                if (lp) {
+                    lp.classList.add("hidden");
+                }
+                let cc = get("#content-container");
+                if (cc) {
+                    cc.classList.remove("hidden");
+                    cc.classList.add("anim-in");
+                }
+
+                if (window.page.onload instanceof Function) {
+                    window.page.onload();
+                }
+                window.page.endload = new Date().valueOf();
+                document.title = window.page.title;
+                setCurrentPath(window.page.url);
+                window.page.loadtiming = (window.page.endload - window.page.startload) / 1000;
+                console.info("[LOAD TIME] 网页加载耗时 " + window.page.loadtiming + " 秒");
+
+                page.autoexecs.forEach(e => {
+                    try {
+                        e.apply();
+                    } catch (err) {
+                        console.error("Errored while executing callback function\n", e,
+                            "\n\nThe error is: ", err);
+                    }
+                });
+                if (page.isIndex) {
+                    get(".float-btn").classList.add("hidden");
+                }
+                page.loaded = true;
+                setTimeout(() => {
+                    if (page.prevPage && page.prevPage != "") {
+                        get(".float-back-btn").classList.remove("hidden");
+                        if (page.prevPageBtnAlwaysShow) {
+                            get(".float-back-btn").classList.add("alwaysShow");
+                        }
+                    }
+                }, 200);
+            }
+        })(window, document);
+
+        function goback() {
+            get(".float-back-btn").classList.remove("alwaysShow");
+            get(".float-back-btn").classList.add("hidden");
+            if (page.prevPage && page.prevPage != "" && page.prevPage != "lastPage") {
+                location.href = page.prevPage;
+            } else {
+                history.go(-1);
+            }
+        }
+    </script>
+</body>
+
+</html>
