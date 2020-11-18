@@ -236,8 +236,7 @@
         function loadData_zxh(force = false,callback){
             waitModal();
             if(force||Object.keys(window.data.zxh).length==0){
-                console.log("load");
-                CKFetch.get(window.data.addr.zxh).then(r=>r.json()).then(
+                CKFetch.get(window.data.addr.zxh+"?v="+Math.random()).then(r=>r.json()).then(
                     json =>{
                         window.data.zxh = json;
                         closeModal();
@@ -245,7 +244,6 @@
                     }
                 );
             }else {
-                console.log("skip");
                 closeModal();
                 if(callback instanceof Function) callback.apply();
             }
@@ -254,8 +252,7 @@
         function loadData_dmx(force = false,callback = ()=>{}){
             waitModal();
             if(force||Object.keys(window.data.dmx).length==0){
-                console.log("load");
-                CKFetch.get(window.data.addr.dmx).then(r=>r.json()).then(
+                CKFetch.get(window.data.addr.dmx+"?v="+Math.random()).then(r=>r.json()).then(
                     json =>{
                         window.data.dmx = json;
                         closeModal();
@@ -263,7 +260,6 @@
                     }
                 );
             }else {
-                console.log("skip");
                 closeModal();
                 if(callback instanceof Function) callback.apply();
             }
