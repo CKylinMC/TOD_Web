@@ -7,6 +7,7 @@ function resetGame() {
     gameData.root.oninput = e => Game_rowEvent(e);
     Game_addNewRow();
     if (!get("#game-result").classList.contains("hide")) get("#game-result").classList.add("hide");
+    get("#game-go").disabled = false;
 }
 
 function Game_addNewRow(){

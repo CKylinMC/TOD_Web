@@ -460,64 +460,6 @@
             openModal(modalTitle(title) + t, "success", "关闭提示");
         }
     </script>
-    <style>
-        .float-btn {
-            position: fixed;
-            right: -120px;
-            bottom: 20px;
-            width: 120px;
-            height: 40px;
-            background: white;
-            line-height: 40px;
-            border-radius: 100px;
-            /* text-align: center; */
-            padding-left: 20px;
-            box-shadow: 0 6px 10px #80808052;
-            transition: right .5s ease 1s;
-        }
-
-        .float-btn:hover {
-            right: -15px;
-            transition: right .3s ease;
-        }
-
-        .float-btn.hidden {
-            right: -320px !important;
-            transition: right .5s ease 1s;
-        }
-
-        .float-back-btn {
-            position: fixed;
-            left: -120px;
-            top: 120px;
-            width: 120px;
-            height: 40px;
-            background: white;
-            line-height: 40px;
-            border-radius: 100px;
-            text-align: right;
-            padding-right: 20px;
-            box-shadow: 0 6px 10px #80808052;
-            transition: left .5s ease 1s;
-        }
-
-        .float-back-btn.hidden {
-            left: -320px !important;
-            transition: left .5s ease 1s;
-        }
-
-        .float-back-btn:hover,
-        .float-back-btn.alwaysShow {
-            left: -15px;
-            transition: left .3s ease;
-        }
-    </style>
-    <div class="float-btn">
-        <a href="/">返回首页</a>
-    </div>
-    <div class="float-back-btn hidden">
-        <a href="javascript:void(0)" onclick="goback()">返回上一页</a>
-    </div>
     <footer>
         推荐在电脑中使用Chrome、Firefox浏览器访问<br><a href="https://github.com/CKylinMC/TOD_Web/issues/new/choose">反馈页面bug</a><br><a href="https://github.com/CKylinMC/TOD_Dict/issues/new/choose">添加新的词条</a><br><a href="https://github.com/CKylinMC/TOD_Web">CKylinMC</a> &copy; 2020
     </footer>
@@ -569,30 +511,9 @@
                             "\n\nThe error is: ", err);
                     }
                 });
-                if (page.isIndex) {
-                    get(".float-btn").classList.add("hidden");
-                }
                 page.loaded = true;
-                setTimeout(() => {
-                    if (page.prevPage && page.prevPage != "") {
-                        get(".float-back-btn").classList.remove("hidden");
-                        if (page.prevPageBtnAlwaysShow) {
-                            get(".float-back-btn").classList.add("alwaysShow");
-                        }
-                    }
-                }, 200);
             }
         })(window, document);
-
-        function goback() {
-            get(".float-back-btn").classList.remove("alwaysShow");
-            get(".float-back-btn").classList.add("hidden");
-            if (page.prevPage && page.prevPage != "" && page.prevPage != "lastPage") {
-                location.href = page.prevPage;
-            } else {
-                history.go(-1);
-            }
-        }
     </script>
 </body>
 

@@ -111,6 +111,11 @@ body{
 }
 
 @media (max-width: 680px) {
+    header{
+        padding: 0;
+        text-align: center;
+    }
+
     .container {
         width: 100vw;
         margin: 12px auto;
@@ -126,6 +131,19 @@ body{
         width: 100vw;
         padding:0;
         text-align: center;
+    }
+
+    #game-result ul.multi-column-menu{
+        width: unset;
+        height: 280px;
+    }
+
+    #game-result{
+        height: 300px;
+    }
+    
+    .game-space{
+        height:0;
     }
 
     .container-btns{
