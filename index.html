@@ -14,11 +14,6 @@
     <meta name="author" content="CKylinMC" />
     <meta http-equiv="keywords" content="TruthOrDareQuestions">
     <meta http-equiv="description" content="TruthOrDareQuestions site">
-    <style>
-        .dialog-button {
-            font-size: medium;
-        }
-    </style>
     <script>
         (function (window) {
             window.data = {
@@ -59,7 +54,6 @@
     <link rel="stylesheet" href="/assets/css/modal.css">
     <link rel="stylesheet" href="/assets/css/PopNotify.css">
     <link rel="stylesheet" href="/assets/css/tips.css">
-    <link rel="stylesheet" href="/assets/css/dialoger_1.1.css">
 </head>
 
 <body>
@@ -82,16 +76,6 @@
         </div>
     </div>
     <div class="container hidden" id="content-container">
-
-        <!-- <style>
-    .container > p,
-    .container > span,
-    .container > ul,
-    .container > table,
-    .container > div {
-        margin-left: 30px;
-    }
-</style> -->
         <h1>真心话大冒险</h1>
 
 
@@ -464,7 +448,6 @@
         推荐在电脑中使用Chrome、Firefox浏览器访问<br><a href="https://github.com/CKylinMC/TOD_Web/issues/new/choose">反馈页面bug</a><br><a href="https://github.com/CKylinMC/TOD_Dict/issues/new/choose">添加新的词条</a><br><a href="https://github.com/CKylinMC/TOD_Web">CKylinMC</a> &copy; 2020
     </footer>
     <script src="/assets/js/Cookies.js"></script>
-    <script src="/assets/js/dialoger_1.1.js"></script>
     <script src="/assets/js/CKFetch.js"></script>
     <script src="/assets/js/PopNotify.js"></script>
     <script src="/assets/js/tips.js"></script>
@@ -475,7 +458,6 @@
     <script>
         initModal();
         initTips();
-        dialoger.init();
         var tipsShow;
         if (tipsShow = getUrlParam("show")) {
             showTips(tipsShow);
