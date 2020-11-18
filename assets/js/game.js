@@ -80,7 +80,7 @@ function Game_Go() {
             ul.appendChild(loser);
             get("#game-result").appendChild(ul);
             get("#game-result").classList.remove("hide");
-            setTimeout(() => { get("#game-go").disabled = false; }, 300);
         }
+        setTimeout(() => { get("#game-go").disabled = false; }, 300);
     },800)
 }
