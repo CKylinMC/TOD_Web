@@ -457,7 +457,7 @@ header > .site-name:hover {
     color: #2195ff;
     transition: color .2s;
     cursor: pointer;
-    margin-right: 60px;
+    /* margin-right: 60px; */
 }
 
 footer {
