@@ -103,10 +103,34 @@ body{
     color: white;
     padding: 8px 12px;
     border-radius: 24px;
-    ;
 }
 
 .top:hover {
+    background-color: #0066ff;
+}
+
+.random-btn{
+    cursor: pointer;
+    position: fixed;
+    right: -100px;
+    background-color: #1c77ff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 24px;
+}
+
+.random-btn.show {
+    cursor: pointer;
+    position: fixed;
+    right: 5vw;
+    /* bottom: 6vh; */
+    background-color: #1c77ff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 24px;
+}
+
+.random-btn:hover {
     background-color: #0066ff;
 }
 

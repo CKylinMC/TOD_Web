@@ -113,7 +113,7 @@
             <div class="include-tags"></div>
             <div class="container-btns">
                 <button onclick="resetFilter()" class="s-resetfilter s-hide red">重置筛选</button>
-                <button onclick="randomOne()" class="s-random s-hide">随机</button>
+                <button onclick="randomOne()" class="s-random s-hide">🎲 随机</button>
             </div>
             <div id="zxh-container" class="s-container">
             </div>
@@ -126,14 +126,16 @@
             <div class="include-tags"></div>
             <div class="container-btns">
                 <button onclick="resetFilter()" class="s-resetfilter s-hide red">重置筛选</button>
-                <button onclick="randomOne()" class="s-random s-hide">随机</button>
+                <button onclick="randomOne()" class="s-random s-hide">🎲 随机</button>
             </div>
             <div id="dmx-container" class="s-container">
             </div>
         </div>
     </template>
 
-    <div class="top" onclick="goTop()">回到顶部</div>
+    <div class="top" onclick="goTop()">&nbsp;↑&nbsp;</div>
+
+    <div class="random-btn" onclick="randomOne()">🎲</div>
 
     <script>
         page.title = "TruthOrDare Questions";
@@ -165,7 +167,10 @@
         });
 
         function goTop(){
-            scrollTo(0,0);
+            scrollTo({ 
+                top: 0, 
+                behavior: "smooth" 
+            });
         }
 
         function loadCard2(){
@@ -347,7 +352,10 @@
             let e = document.createEvent("MouseEvents");
             e.initEvent("click",true,true);
             newarr[0].dispatchEvent(e);
-            scrollTo(0,newarr[0].offsetTop+(pageYOffset/2));
+            scrollTo({ 
+                top: newarr[0].offsetTop+innerHeight/2, 
+                behavior: "smooth" 
+            });
             showTips("🎲 随机模式");
         }
 
@@ -379,6 +387,16 @@
                     if(!flag)return;
                     container.appendChild(createItem(e.name,e.tags,true));
                     updateTagsDisplay();
+
+                    /* display random btn */
+                    let btn = get(".random-btn");
+                    let atop = get(".top");
+                    let topOffset = 0;
+                    if(atop) topOffset = atop.offsetTop-atop.offsetHeight-10;
+                    if(btn) {
+                        btn.style.top = topOffset + "px";
+                        if(!btn.classList.contains("show")) btn.classList.add("show");
+                    }
                 });
             }
             if(type=="zxh") return loadData_zxh(false,func);
