@@ -444,7 +444,7 @@ header {
     height: 60px;
     width: 100%;
     box-shadow: 0 0 7px 4px #5353531f;
-    z-index: 9998;
+    z-index: 998;
 }
 
 header > .site-name {

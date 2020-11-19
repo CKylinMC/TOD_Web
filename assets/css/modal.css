@@ -79,6 +79,8 @@
 
 .modal-content {
     line-height: 2rem;
+    max-height: 80vh;
+    overflow-y: scroll;
 }
 
 @keyframes fadeIn {

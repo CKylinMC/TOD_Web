@@ -133,7 +133,9 @@
         </div>
     </template>
 
-    <div class="top" onclick="goTop()">&nbsp;↑&nbsp;</div>
+    <div class="helpbtn" onclick="helpModal()">&nbsp;?&nbsp;</div>
+
+    <div class="top hide" onclick="goTop()">&nbsp;↑&nbsp;</div>
 
     <div class="random-btn" onclick="randomOne()">🎲</div>
 
@@ -166,11 +168,36 @@
             resetGame();
         });
 
+        window.onscroll = e=>{
+            let topbtn = get(".top");
+            if(!topbtn) return;
+            if(pageYOffset>200){
+                if(topbtn.classList.contains("hide"))topbtn.classList.remove("hide");
+            }else{
+                if(!topbtn.classList.contains("hide"))topbtn.classList.add("hide");
+            }
+        }
+
         function goTop(){
             scrollTo({ 
                 top: 0, 
                 behavior: "smooth" 
             });
+        }
+
+        function helpModal(){
+            openModal(modalTitle("关于“真心话大冒险”")+`
+            <h2>使用方法</h2>
+            真心话大冒险界面分为上下两部分，默认只显示上半部分。上半部分中，可以输入参与人姓名，输入两个以上参与人后，可以点击“Go!”按钮，会自动在上面所输入人名中选出赢家和输家，快速开局。点击重置可以重置整个界面，包括输入的参与人也会被清空。<br><br>
+            下半部分默认不显示，需要点击“真心话”或者“大冒险”按钮选择进入一个模式，进入后自动跳转到对应模式的卡片，将列出所有的问题或要求。点击“随机”可以快速随机到一个卡片。点击卡片的标签可以选择必须包含这个标签，或者禁止包含这个标签。当选择禁止包含或必须包含后，在下半部分的顶部会显示已经筛选的条件标签，点击即可取消。点击重置取消所有筛选。<br><br>
+            右下角浮动按钮有“快速随机”和“返回顶部”。“快速随机”按钮仅会在显示下半部分卡片后显示，点击即可快速随机卡片。“返回顶部”按钮仅会在滚动到非顶部区域时显示，点击可以快速回到顶部。
+            <br><br>
+            <h2>关于“真心话大冒险”</h2>
+            这是 <a href="https://www.ckylin.site">我 (CKylinMC)</a> 使用以前的练手作业改的一个项目，代码上仅仅是可以运行的程度，但是所有的功能都是自己写的，包括页面样式。<br><br>
+            <b>项目开源地址：</b><br><a href="https://github.com/ckylinmc/TOD_Web">真心话大冒险 网页</a><br><a href="https://github.com/ckylinmc/TOD_Dict">真心话大冒险 语料</a>
+            <br><br>
+            欢迎反馈或贡献！
+            `);
         }
 
         function loadCard2(){

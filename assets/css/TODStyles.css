@@ -94,7 +94,8 @@ body{
     box-shadow: 0 0 7px 0px #d3d3d3;
 }
 
-.top {
+.helpbtn{
+    transition: right .3s ease-in-out;
     cursor: pointer;
     position: fixed;
     right: 5vw;
@@ -105,11 +106,32 @@ body{
     border-radius: 24px;
 }
 
+.helpbtn:hover {
+    background-color: #0066ff;
+}
+
+.top {
+    transition: right .3s ease-in-out;
+    cursor: pointer;
+    position: fixed;
+    right: 5vw;
+    bottom: 12vh;
+    background-color: #1c77ff;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 24px;
+}
+
+.top.hide{
+    right: -100px;
+}
+
 .top:hover {
     background-color: #0066ff;
 }
 
 .random-btn{
+    transition: right .3s ease-in-out;
     cursor: pointer;
     position: fixed;
     right: -100px;
