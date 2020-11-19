@@ -162,6 +162,12 @@ body{
     background-color: #0066ff;
 }
 
+.container-btns{
+    float: right;
+    transform: translate(-20px, -160%);
+    width:unset !important;
+}
+
 @media (max-width: 680px) {
     header{
         padding: 0;
