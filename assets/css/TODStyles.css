@@ -42,7 +42,7 @@ body{
 .game-name-item{
     opacity: 1;
     overflow-y: hidden;
-    height: 28px;
+    height: 33px;
     animation: item-in .3s forwards;
 }
 
