@@ -4,7 +4,7 @@ function resetGame() {
         root: get("#game-names")
     };
     gameData.root.innerHTML = "";
-    gameData.root.oninput = e => Game_rowEvent(e);
+    gameData.root.oninput = gameData.root.onkeydown = e => Game_rowEvent(e);
     Game_addNewRow();
     if (!get("#game-result").classList.contains("hide")) get("#game-result").classList.add("hide");
     get("#game-go").disabled = false;
@@ -23,19 +23,31 @@ function Game_addNewRow(){
 }
 
 function Game_rowEvent(event) {
+    console.log(event);
     let target = event.path[1];
     let input = event.path[0];
     if(gameData.root.childElementCount>0){
         if (input.value.trim() != "" && target == gameData.root.lastElementChild) {
             Game_addNewRow();
         }
+        if ((event.inputType && event.inputType == "deleteContentBackward")
+            || (event.key && event.key == "Backspace")
+            || (event.code && event.code == "Backspace")
+        ){
+            if (input.value.trim() == "" && target != gameData.root.firstElementChild) {
+                // console.log(target.previousElementSibling);
+                target.previousElementSibling.children[1].focus();
+            }
+        }
         if (target.nextElementSibling//不是最后一个元素
             && input.value.trim() == ""//是空的
             && target.nextElementSibling == gameData.root.lastElementChild//下一个元素是最后一个元素
             && target.nextElementSibling.children[1].value.trim() == ""//下一个元素也是空的
         ) {
-            target.nextElementSibling.remove();
             gameData.rows--;
+            target.nextElementSibling.style.animation = "item-out .3s forwards";
+            setTimeout(()=>
+            target.nextElementSibling.remove(),300);
         }
     } else {
         Game_addNewRow();
