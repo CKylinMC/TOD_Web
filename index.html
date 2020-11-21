@@ -17,6 +17,17 @@
     <script>
         (function (window) {
             window.data = {
+                version: '1.0',
+                updateNote: `
+                    <h2>更新日志 (v1.0)</h2>
+                    2020年11月21日
+                    <ul>
+                        <li>删除无用代码，提高执行效率</li>
+                        <li>优化标签显示效果</li>
+                        <li>增加当前筛选条数展示</li>
+                        <li>增加更新日志提示</li>
+                    </ul>
+                `,
                 curr: "none",
                 addr: {
                     zxh: "https://cdn.jsdelivr.net/gh/CKylinMC/TOD_Dict@main/questions.json",
@@ -108,9 +119,9 @@
     </div>
     <template id="temp-zxh">
         <div class="container hidden" id="card2">
-            <h1>❤️ 真心话</h1>
-            <div class="exclude-tags"></div>
-            <div class="include-tags"></div>
+            <h1>❤️ 真心话 <span class="counter"></span></h1>
+            <div class="exclude-tags hide"></div>
+            <div class="include-tags hide"></div>
             <div class="container-btns">
                 <button onclick="resetFilter()" class="s-resetfilter s-hide red">重置筛选</button>
                 <button onclick="randomOne()" class="s-random s-hide">🎲 随机</button>
@@ -121,7 +132,7 @@
     </template>
     <template id="temp-dmx">
         <div class="container hidden" id="card2">
-            <h1>⚔️ 大冒险</h1>
+            <h1>⚔️ 大冒险 <span class="counter"></span></h1>
             <div class="exclude-tags"></div>
             <div class="include-tags"></div>
             <div class="container-btns">
@@ -140,32 +151,29 @@
     <div class="random-btn" onclick="randomOne()">🎲</div>
 
     <script>
-        page.title = "TruthOrDare Questions";
+        page.title = "真心话大冒险 网页版";
         // page.url = "/index.html";
         page.isIndex = true;
-
-        page.callback(function () {
-            let mode = getUrlParam("mode");
-            if (mode) {
-                if (mode == "z") {
-                    load_zxh();
-                    return;
-                }
-                if (mode == "d") {
-                    load_dmx();
-                    return;
-                }
-            }
-        });
         
 
         page.callback(function () {
             loadCard2();
         });
-        
 
         page.callback(function () {
             resetGame();
+        });
+
+        page.callback(function () {
+            if(!localStorage.notFirstTime){
+                localStorage.notFirstTime = 1;
+                localStorage.version = window.data.version;
+                helpModal();
+            }
+            if(localStorage.version!=window.data.version){
+                localStorage.version = window.data.version;
+                updateNote();
+            }
         });
 
         window.onscroll = e=>{
@@ -185,6 +193,10 @@
             });
         }
 
+        function updateNote(){
+            openModal(window.data.updateNote);
+        }
+
         function helpModal(){
             openModal(modalTitle("关于“真心话大冒险”")+`
             <h2>使用方法</h2>
@@ -195,6 +207,8 @@
             <h2>关于“真心话大冒险”</h2>
             这是 <a href="https://www.ckylin.site">我 (CKylinMC)</a> 使用以前的练手作业改的一个项目，代码上仅仅是可以运行的程度，但是所有的功能都是自己写的，包括页面样式。<br><br>
             <b>项目开源地址：</b><br><a href="https://github.com/ckylinmc/TOD_Web">真心话大冒险 网页</a><br><a href="https://github.com/ckylinmc/TOD_Dict">真心话大冒险 语料</a>
+            <br><br>
+            <button onclick="updateNote()">更新日志</button>
             <br><br>
             欢迎反馈或贡献！
             `);
@@ -314,10 +328,17 @@
                 arrs.forEach(e=>{
                     e.innerHTML = "<h2>排除：</h2>";
                     e.appendChild(ul);
+                    let height = 52;
+                    [...e.childNodes].forEach(cn=>{
+                        height += cn.offsetHeight;
+                    })
+                    e.style.height = height+"px";
+                    if(e.classList.contains("hide")) e.classList.remove("hide");
                 });
             }else{
                 arrs = document.querySelectorAll(".exclude-tags");
                 arrs.forEach(e=>{
+                    if(!e.classList.contains("hide")) e.classList.add("hide");
                     e.innerHTML = "";
                 });
             }
@@ -336,11 +357,18 @@
                 arrs.forEach(e=>{
                     e.innerHTML = "<h2>包含：</h2>";
                     e.appendChild(ul);
+                    let height = 52;
+                    [...e.childNodes].forEach(cn=>{
+                        height += cn.offsetHeight;
+                    })
+                    e.style.height = height+"px";
+                    if(e.classList.contains("hide")) e.classList.remove("hide");
                 });
             }else{
                 arrs = document.querySelectorAll(".include-tags");
                 arrs.forEach(e=>{
                     e.innerHTML = "";
+                    if(!e.classList.contains("hide")) e.classList.add("hide")
                 });
             }
         }
@@ -413,18 +441,20 @@
                     });
                     if(!flag)return;
                     container.appendChild(createItem(e.name,e.tags,true));
-                    updateTagsDisplay();
-
-                    /* display random btn */
-                    let btn = get(".random-btn");
-                    let atop = get(".top");
-                    let topOffset = 0;
-                    if(atop) topOffset = atop.offsetTop-atop.offsetHeight-10;
-                    if(btn) {
-                        btn.style.top = topOffset + "px";
-                        if(!btn.classList.contains("show")) btn.classList.add("show");
-                    }
                 });
+                updateTagsDisplay();
+
+                /* display random btn */
+                let btn = get(".random-btn");
+                let atop = get(".top");
+                let topOffset = 0;
+                if(atop) topOffset = atop.offsetTop-atop.offsetHeight-10;
+                if(btn) {
+                    btn.style.top = topOffset + "px";
+                    if(!btn.classList.contains("show")) btn.classList.add("show");
+                }
+                let counter = get(".counter");
+                if(counter) counter.innerHTML = `(${container.childElementCount} 条)`;
             }
             if(type=="zxh") return loadData_zxh(false,func);
             else return loadData_dmx(false,func);
@@ -497,7 +527,6 @@
         <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span><br>
         <a href="https://github.com/CKylinMC/TOD_Web">CKylinMC</a> &copy; 2020
     </footer>
-    <script src="/assets/js/Cookies.js"></script>
     <script src="/assets/js/CKFetch.js"></script>
     <script src="/assets/js/PopNotify.js"></script>
     <script src="/assets/js/tips.js"></script>

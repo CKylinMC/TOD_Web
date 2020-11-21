@@ -101,6 +101,19 @@ body{
     box-shadow: 0 0 7px 0px #d3d3d3;
 }
 
+.include-tags,
+.exclude-tags{
+    transition: height .3s ease-in-out,opacity .3s;
+    opacity: 1;
+    overflow-y: hidden;
+}
+
+.include-tags.hide,
+.exclude-tags.hide{
+    opacity: 0!important;
+    height: 0px!important;
+}
+
 .helpbtn{
     transition: right .3s ease-in-out;
     cursor: pointer;
