@@ -20,6 +20,7 @@ function Game_addNewRow(){
     li.appendChild(span);
     li.appendChild(input);
     gameData.root.appendChild(li);
+    li.style.height = input.offsetHeight + "px";
 }
 
 function Game_rowEvent(event) {
@@ -37,6 +38,7 @@ function Game_rowEvent(event) {
             if (input.value.trim() == "" && target != gameData.root.firstElementChild) {
                 // console.log(target.previousElementSibling);
                 target.previousElementSibling.children[1].focus();
+                // if(target)
             }
         }
         if (target.nextElementSibling//不是最后一个元素
