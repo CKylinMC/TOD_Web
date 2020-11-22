@@ -275,7 +275,7 @@ function makeTag(name = "-", asdom = false) {
     } else return `<li class="s-tag-item">{name}</li>`;
 }
 
-function createItem(title = "@#$%^&*", tags = [], asdom = false) {
+function createItem(title = "@#$%^&*", tags = [], asdom = false, description = null) {
     if (asdom) {
         let div = document.createElement("div");
         div.onclick = e => {
@@ -295,10 +295,16 @@ function createItem(title = "@#$%^&*", tags = [], asdom = false) {
         div.className = "s-item";
         let h2 = document.createElement("h2");
         h2.innerHTML = title;
+        div.appendChild(h2);
+        if (description != null) {
+            let des = document.createElement("span");
+            des.className = "s-des";
+            des.innerHTML = description;
+            div.appendChild(des);
+        }
         let ul = document.createElement("ul");
         ul.className = "s-tags";
         tags.forEach(e => ul.appendChild(makeTag(e, true)));
-        div.appendChild(h2);
         div.appendChild(ul);
         return div;
     } else {

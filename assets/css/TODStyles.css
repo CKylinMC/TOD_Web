@@ -95,6 +95,18 @@ body{
     color: rgb(0, 153, 255);
 }
 
+.s-item .s-des {
+    transition: opacity .3s;
+    display: block;
+    opacity: .6;
+    padding-left: 12px;
+    margin-top: -12px;
+}
+
+.s-item .s-des:hover {
+    opacity: 1;
+}
+
 .s-tag-item:hover {
     background-color: #4dafff;
     transform: scale(1.05);
