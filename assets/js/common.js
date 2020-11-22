@@ -62,6 +62,29 @@ function getUriInfo(url) {
     return a;
 }
 
+function copy(content) {
+    let copycontainer;
+    copycontainer = document.querySelector("#copycontainer");
+    if (!copycontainer) {
+        copycontainer = document.createElement("input");
+        copycontainer.id = "copycontainer";
+        copycontainer.style.position = "absolute";
+        copycontainer.style.top = "-5000px";
+        copycontainer.style.left = "-5000px";
+        copycontainer.style.opacity = "0";
+        document.body.appendChild(copycontainer);
+    }
+    if (content instanceof HTMLElement) {
+        copycontainer.value = content.innerText;
+    } else {
+        copycontainer.value = content;
+    }
+    copycontainer.select();
+    document.execCommand("copy", false, null);
+    showTips("✔️ 已复制","success");
+    setTimeout(() => copycontainer.value = "", 50);
+}
+
 function domToString(el) {
     if (el instanceof HTMLElement) {
         let cont = document.createElement("div");

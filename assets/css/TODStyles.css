@@ -55,6 +55,7 @@ body{
     margin-top: 24px;
     word-wrap: break-word;
     background: white;
+    position: relative;
 }
 
 .s-item h2 {
@@ -101,6 +102,23 @@ body{
     opacity: .6;
     padding-left: 12px;
     margin-top: -12px;
+}
+
+.s-item .s-cpbtn{
+    transition: background-color .3s, color .3s;
+    position: absolute;
+    right: 0;
+    top: 0;
+    display: block;
+    border-top-right-radius: 20px;
+    background-color: #ffffff00;
+    color: black;
+    padding: 12px;
+}
+
+.s-item .s-cpbtn:hover {
+    background-color:#5fb7ff;
+    color:  #ffffff;
 }
 
 .s-item .s-des:hover {
@@ -280,5 +298,9 @@ body{
 
     .s-item:hover {
         transform: none;
+    }
+
+    .s-item .s-cpbtn{
+        border-top-right-radius: 0px;
     }
 }

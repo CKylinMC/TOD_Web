@@ -295,6 +295,11 @@ function createItem(title = "@#$%^&*", tags = [], asdom = false, description = n
         div.className = "s-item";
         let h2 = document.createElement("h2");
         h2.innerHTML = title;
+        let btn = document.createElement("span");
+        btn.className = "s-cpbtn";
+        btn.onclick = () => copy(title);
+        btn.innerHTML = "📋";
+        div.appendChild(btn);
         div.appendChild(h2);
         if (description != null) {
             let des = document.createElement("span");
