@@ -275,6 +275,24 @@ function makeTag(name = "-", asdom = false) {
     } else return `<li class="s-tag-item">{name}</li>`;
 }
 
+function doCopy(event, content) {
+    copy(content);
+    let e = event.target;
+    e.style.opacity = 0;
+    setTimeout(() => {
+        e.innerHTML = "✔️";
+        e.style.opacity = 1;
+        setTimeout(() => {
+            e.style.opacity = 0;
+            setTimeout(() => {
+                e.innerHTML = "📋";
+                e.style.opacity = 1;
+            }, 200);
+        }, 1000);
+    }, 200);
+    
+}
+
 function createItem(title = "@#$%^&*", tags = [], asdom = false, description = null) {
     if (asdom) {
         let div = document.createElement("div");
@@ -297,7 +315,7 @@ function createItem(title = "@#$%^&*", tags = [], asdom = false, description = n
         h2.innerHTML = title;
         let btn = document.createElement("span");
         btn.className = "s-cpbtn";
-        btn.onclick = () => copy(title);
+        btn.onclick = (ev) => doCopy(ev,title);
         btn.innerHTML = "📋";
         div.appendChild(btn);
         div.appendChild(h2);

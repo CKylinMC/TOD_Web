@@ -81,7 +81,6 @@ function copy(content) {
     }
     copycontainer.select();
     document.execCommand("copy", false, null);
-    showTips("✔️ 已复制","success");
     setTimeout(() => copycontainer.value = "", 50);
 }
 
