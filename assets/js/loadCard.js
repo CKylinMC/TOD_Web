@@ -245,7 +245,7 @@ function loadList(type) {
                 }
             });
             if (!flag) return;
-            container.appendChild(createItem(e.name, e.tags, true));
+            container.appendChild(createItem(e.name, e.tags, true, e.des));
         });
         updateTagsDisplay();
 
