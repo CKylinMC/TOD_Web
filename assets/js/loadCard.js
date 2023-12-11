@@ -299,7 +299,7 @@ function createItem(title = "@#$%^&*", tags = [], asdom = false, description = n
         div.onclick = e => {
             let flag = true;
             let targetdom;
-            e.path.forEach(i => {
+            e.composedPath().forEach(i => {
                 console.log(i.tagName);
                 if (i.tagName && i.tagName.toLowerCase() == "li") flag = false;
                 if (i.classList && i.classList.contains("s-item")) targetdom = i;
