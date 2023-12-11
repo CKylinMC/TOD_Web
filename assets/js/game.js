@@ -25,8 +25,8 @@ function Game_addNewRow(){
 
 function Game_rowEvent(event) {
     console.log(event);
-    let target = event.path[1];
-    let input = event.path[0];
+    let target = event.target.parentNode;
+    let input = event.target;
     if(gameData.root.childElementCount>0){
         if (input.value.trim() != "" && target == gameData.root.lastElementChild) {
             Game_addNewRow();
